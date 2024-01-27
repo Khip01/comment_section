@@ -14,6 +14,12 @@ Future<void> main() async {
 }
 
 class MyApp extends StatelessWidget {
+  // Routing
+  // / Landing Page / Login
+  //              / Register
+
+  // / Comment Section (Logout to go to Landing Page)
+
   // Go Router
   final GoRouter _router = GoRouter(routes: [
     GoRoute(
@@ -27,14 +33,14 @@ class MyApp extends StatelessWidget {
           path: "login",
           name: "login_page",
           builder: (context, state) {
-            return LoginPage();
+            return const LoginPage();
           },
         ),
         GoRoute(
-            path: "reqister",
+            path: "register",
             name: "register_page",
             builder: (context, state) {
-              return RegisterPage();
+              return const RegisterPage();
             })
       ],
     ),
@@ -42,7 +48,7 @@ class MyApp extends StatelessWidget {
       path: "/",
       name: "comment_page",
       builder: (context, state) {
-        return CommentPage();
+        return const CommentPage();
       },
     ),
   ], initialLocation: "/welcome", debugLogDiagnostics: true, routerNeglect: true);
@@ -52,10 +58,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
+      theme: ThemeData(
+        // colorSchemeSeed: Color.fromARGB(255, 241, 241, 241),
+        colorScheme: ColorScheme(brightness: Brightness.light, primary: Colors.black, onPrimary: Colors.blue, secondary: Colors.white70, onSecondary: Colors.white54, error: Colors.red, onError: Colors.redAccent, background: Colors.white, onBackground: Colors.black, surface: Colors.white, onSurface: Colors.black),
+      ),
       routeInformationParser: _router.routeInformationParser,
       routeInformationProvider: _router.routeInformationProvider,
       routerDelegate: _router.routerDelegate,
-      routerConfig: _router,
+      debugShowCheckedModeBanner: false, // Remove Debug banner when debugging
     );
   }
 }
