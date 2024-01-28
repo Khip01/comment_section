@@ -16,7 +16,7 @@ class LandingPage extends StatelessWidget {
             child: Container(
               // height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
-              child: Image.asset("wave.png", fit: BoxFit.fitWidth),
+              child: Image.asset("assets/wave.png", fit: BoxFit.fitWidth),
             ),
           ),
           SizedBox(
@@ -128,7 +128,7 @@ class LandingPage extends StatelessWidget {
                       // color: Colors.red,
                       // width: 400,
                       // height: 400,
-                      child: SvgPicture.asset("chat.svg"),
+                      child: SvgPicture.asset("assets/chat.svg"),
                     ),
                   ),
                 ),
