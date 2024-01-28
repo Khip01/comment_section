@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _LoginPageState extends State<LoginPage> {
             child: Card(
               clipBehavior: Clip.antiAlias,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(3)),
+                  borderRadius: BorderRadius.circular(10)),
               elevation: 4,
               surfaceTintColor: const Color.fromARGB(255, 255, 255, 255),
               child: Padding(
@@ -42,7 +43,10 @@ class _LoginPageState extends State<LoginPage> {
                             },
                             child: const MouseRegion(
                               cursor: SystemMouseCursors.click,
-                              child: Icon(Icons.arrow_back),
+                              child: Icon(
+                                Icons.arrow_back,
+                                color: Color.fromARGB(255, 129, 168, 255),
+                              ),
                             ),
                           ),
                         ),
@@ -55,16 +59,40 @@ class _LoginPageState extends State<LoginPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Sign in",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 28),
+                            Text.rich(
+                              TextSpan(
+                                text: "Sign ",
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 28),
+                                ),
+                                children: const [
+                                  TextSpan(
+                                    text: "In",
+                                    style: TextStyle(color: Color.fromARGB(255, 129, 168, 255)),
+                                  ),
+                                ]
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 20),
                               child: TextFormField(
+                                style: GoogleFonts.rubik(),
                                 decoration: const InputDecoration(
-                                  hintText: "Email",
+                                  hintText: "Your Email",
+                                  focusedBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 129, 168, 255),
+                                        width: 2),
+                                  ),
+                                  enabledBorder: UnderlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 129, 168, 255),
+                                        width: 1),
+                                  ),
                                 ),
                               ),
                             ),
@@ -72,14 +100,23 @@ class _LoginPageState extends State<LoginPage> {
                               alignment: Alignment.centerRight,
                               child: SizedBox(
                                 width: 120,
+                                height: 40,
                                 child: ElevatedButton(
                                   onPressed: () {},
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(3),
+                                      borderRadius: BorderRadius.circular(7),
                                     ),
+                                    surfaceTintColor: const Color.fromARGB(
+                                        255, 129, 168, 255),
+                                    foregroundColor: Colors.white,
+                                    backgroundColor: const Color.fromARGB(
+                                        255, 129, 168, 255),
                                   ),
-                                  child: const Text("Sign in"),
+                                  child: Text(
+                                    "Login",
+                                    style: GoogleFonts.rubik(),
+                                  ),
                                 ),
                               ),
                             ),
