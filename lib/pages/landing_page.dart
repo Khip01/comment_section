@@ -1,13 +1,10 @@
 import 'package:flutter_svg/svg.dart';
-import 'package:comment_section/source/source_link.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LandingPage extends StatelessWidget {
   LandingPage({Key? key}) : super(key: key);
-
-  final SourceLink src = SourceLink();
 
   @override
   Widget build(BuildContext context) {
