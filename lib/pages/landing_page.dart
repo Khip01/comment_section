@@ -33,18 +33,29 @@ class LandingPage extends StatelessWidget {
                     // color: Colors.red,
                     padding: EdgeInsets.only(left: 110),
                     // width: 500,
+                    height: 300,
                     child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(
-                          "Welcome to my Comment Section!",
-                          style: GoogleFonts.rubik(
-                            textStyle: const TextStyle(
-                                fontSize: 47, fontWeight: FontWeight.w700),
+                        Text.rich(
+                          TextSpan(
+                            text: "Welcome to my ",
+                            style: GoogleFonts.rubik(
+                              textStyle: const TextStyle(
+                                  fontSize: 47, fontWeight: FontWeight.w700),
+                            ),
+                            children: const [
+                              TextSpan(
+                                text: "Comment Section",
+                                style: TextStyle(
+                                    color: Color.fromARGB(255, 129, 168, 255),),
+                              ),
+                              TextSpan(text: "!"),
+                            ],
                           ),
                         ),
                         Text(
-                          "This is a platform to comment freely about me, or discuss any topic for free. And of course your identity will remain a secret.",
+                          "This is a platform to comment freely about me, or discuss any topic for free. And of course your identity will remain secret on other users.",
                           style: GoogleFonts.rubik(
                             textStyle: const TextStyle(
                               fontSize: 18,
@@ -53,9 +64,10 @@ class LandingPage extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            SizedBox(
-                              width: 100,
-                              height: 50,
+                            Container(
+                              margin: EdgeInsets.only(right: 30),
+                              width: 170,
+                              height: 60,
                               child: ElevatedButton(
                                 onPressed: () {
                                   context.goNamed("login_page");
@@ -64,18 +76,46 @@ class LandingPage extends StatelessWidget {
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  surfaceTintColor: Color.fromARGB(255, 129, 168, 255),
+                                  surfaceTintColor:
+                                      const Color.fromARGB(255, 129, 168, 255),
                                   foregroundColor: Colors.white,
-                                  backgroundColor: Color.fromARGB(255, 129, 168, 255),
+                                  backgroundColor:
+                                      const Color.fromARGB(255, 129, 168, 255),
                                 ),
-                                child: Text("Sign in"),
+                                child: Text(
+                                  "SIGN IN",
+                                  style: GoogleFonts.rubik(
+                                      textStyle: const TextStyle(
+                                          fontWeight: FontWeight.bold)),
+                                ),
                               ),
                             ),
-                            ElevatedButton(
-                              onPressed: () {
-                                context.goNamed("register_page");
-                              },
-                              child: Text("Register for FREE"),
+                            SizedBox(
+                              width: 170,
+                              height: 60,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  context.goNamed("register_page");
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    side: const BorderSide(
+                                        color:
+                                            Color.fromARGB(255, 129, 168, 255),
+                                        width: 1),
+                                  ),
+                                  surfaceTintColor: Colors.white,
+                                  foregroundColor:
+                                      const Color.fromARGB(255, 129, 168, 255),
+                                  backgroundColor: Colors.white,
+                                ),
+                                child: Text(
+                                  "Register for FREE",
+                                  style: GoogleFonts.rubik(),
+                                ),
+                              ),
                             ),
                           ],
                         ),
@@ -103,10 +143,10 @@ class LandingPage extends StatelessWidget {
     );
   }
 
-  // _elevatedBUttonStyle() {
-  //   return ElevatedButton.styleFrom(
-  //     foregroundColor: Colors.white,
-  //     backgroundColor: Colors.blueAccent,
-  //   );
-  // }
+// _elevatedBUttonStyle() {
+//   return ElevatedButton.styleFrom(
+//     foregroundColor: Colors.white,
+//     backgroundColor: Colors.blueAccent,
+//   );
+// }
 }
