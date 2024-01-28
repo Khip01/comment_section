@@ -46376,7 +46376,7 @@ A.t0.prototype={
 L(a){return B.Of}}
 A.tX.prototype={
 L(a){var s,r,q,p,o,n=null,m=t.w,l=A.bJ(a,n,m).w
-l=A.ux(-20,A.hd(n,new A.yR(A.aKz(n,n,new A.xc("wave.png",n,n)),B.B6,n),B.z,n,n,n,n,n,l.a.a),n,n,n,n,n,n)
+l=A.ux(-20,A.hd(n,new A.yR(A.aKz(n,n,new A.xc("assets/wave.png",n,n)),B.B6,n),B.z,n,n,n,n,n,l.a.a),n,n,n,n,n,n)
 m=A.bJ(a,n,m).w
 s=A.C7(A.c0(B.IK,n,A.hM().$1$textStyle(B.TN),"Welcome to my "),n,n)
 r=A.eY("This is a platform to comment freely about me, or discuss any topic for free. And of course your identity will remain secret on other users.",n,n,n,A.hM().$1$textStyle(B.T3),n,n)
@@ -46385,7 +46385,7 @@ q=A.hd(n,A.a3i(A.eY("SIGN IN",n,n,n,A.hM().$1$textStyle(B.eK),n,n),new A.a7B(a),
 p=A.a3j(n,n,B.i,n,n,n,0,n,n,B.ax,n,n,n,n,new A.c4(A.kX(10),B.lH),n,B.i,n,n,n)
 o=t.p
 p=A.tr(A.hd(n,A.iF(A.a([s,r,A.NN(A.a([q,A.dE(A.a3i(A.eY("Register for FREE",n,n,n,A.hM().$0(),n,n),new A.a7C(a),p),60,170)],o),B.aX,B.aN)],o),B.aX,B.LE,B.aN),B.z,n,n,300,n,new A.aK(110,0,0,0),n),6)
-return A.acp(n,A.qz(B.cP,A.a([l,A.dE(A.NN(A.a([p,A.tr(A.ha(A.hd(n,new A.OI(new A.BX("chat.svg",n,n,n,n),n,n),B.z,n,n,n,n,new A.aK(0,0,70,0),n),n,n),5)],o),B.aX,B.aN),m.a.b,n)],o),B.a7,B.cE))}}
+return A.acp(n,A.qz(B.cP,A.a([l,A.dE(A.NN(A.a([p,A.tr(A.ha(A.hd(n,new A.OI(new A.BX("assets/chat.svg",n,n,n,n),n,n),B.z,n,n,n,n,new A.aK(0,0,70,0),n),n,n),5)],o),B.aX,B.aN),m.a.b,n)],o),B.a7,B.cE))}}
 A.a7B.prototype={
 $0(){A.axf(this.a,"login_page")},
 $S:0}
