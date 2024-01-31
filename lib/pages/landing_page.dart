@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LandingPage extends StatelessWidget {
-  LandingPage({Key? key}) : super(key: key);
+  const LandingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class LandingPage extends StatelessWidget {
         children: [
           Positioned(
             bottom: -20,
-            child: Container(
+            child: SizedBox(
               // height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               child: Image.asset("assets/wave.png", fit: BoxFit.fitWidth),
@@ -28,7 +28,7 @@ class LandingPage extends StatelessWidget {
                   flex: 6,
                   child: Container(
                     // color: Colors.red,
-                    padding: EdgeInsets.only(left: 110),
+                    padding: const EdgeInsets.only(left: 110),
                     // width: 500,
                     height: 300,
                     child: Column(
@@ -56,13 +56,14 @@ class LandingPage extends StatelessWidget {
                           style: GoogleFonts.rubik(
                             textStyle: const TextStyle(
                               fontSize: 18,
+                              color: Color.fromARGB(255, 60, 81, 128),
                             ),
                           ),
                         ),
                         Row(
                           children: [
                             Container(
-                              margin: EdgeInsets.only(right: 30),
+                              margin: const EdgeInsets.only(right: 30),
                               width: 170,
                               height: 60,
                               child: ElevatedButton(
@@ -124,7 +125,7 @@ class LandingPage extends StatelessWidget {
                   flex: 5,
                   child: Center(
                     child: Container(
-                      padding: EdgeInsets.only(right: 70),
+                      padding: const EdgeInsets.only(right: 70),
                       // color: Colors.red,
                       // width: 400,
                       // height: 400,
