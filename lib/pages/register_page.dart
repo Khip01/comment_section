@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class RegisterPage extends StatefulWidget {
-  const RegisterPage({Key? key}) : super(key: key);
+  const RegisterPage({super.key});
 
   @override
   State<RegisterPage> createState() => _LoginPageState();
@@ -288,7 +288,9 @@ class _LoginPageState extends State<RegisterPage> {
               width: 120,
               height: 40,
               child: ElevatedButton(
-                onPressed: agreementIsCheck ? () {} : null,
+                onPressed: agreementIsCheck ? () {
+                  context.goNamed("comment_page");
+                } : null,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(7),
