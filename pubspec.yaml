@@ -39,6 +39,7 @@ dependencies:
   go_router: ^13.0.1
   flutter_svg: ^2.0.9
   google_fonts: ^6.1.0
+  dropdown_button2: ^2.3.9
 
 dev_dependencies:
   flutter_test:
