@@ -1,5 +1,7 @@
+import 'package:comment_section/dummy_data/dummy_comments.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -41,14 +43,16 @@ class _CommentPageState extends State<CommentPage> {
           ),
           Align(
             alignment: Alignment.center,
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 40),
-              width: 1315,
+            child: SizedBox(
+              // margin: const EdgeInsets.symmetric(horizontal: 40),
+              // width: 1315,
               child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 115),
                 children: [
                   _titleSection(),
                   _headingSection(),
-                  _yourComment(),
+                  _menuSection(),
+                  _myCommentSection(),
                   _commentSection(),
                 ],
               ),
@@ -114,7 +118,7 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _yourComment() {
+  Widget _menuSection() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       height: 80,
@@ -154,9 +158,9 @@ class _CommentPageState extends State<CommentPage> {
                                 textAlign: TextAlign.right,
                                 style: GoogleFonts.rubik(
                                   textStyle: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 16,
-                                      color: Color.fromARGB(255, 100, 119, 166),
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 16,
+                                    color: Color.fromARGB(255, 100, 119, 166),
                                   ),
                                 ),
                               ),
@@ -232,10 +236,175 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
+  Widget _myCommentSection() {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 30),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(
+          maxHeight: 180,
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: SvgPicture.network(
+                "https://api.dicebear.com/7.x/thumbs/svg?seed=khip01",
+                height: 60,
+                width: 60,
+                fit: BoxFit.cover,
+              ),
+            ),
+            Flexible(
+              fit: FlexFit.tight,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Stack(
+                  children: [
+                    TextFormField(
+                      keyboardType: TextInputType.multiline,
+                      maxLines: null,
+                      style: GoogleFonts.rubik(
+                        textStyle: const TextStyle(fontWeight: FontWeight.w300),
+                      ),
+                      decoration: const InputDecoration(
+                          hintText: "Add a comment...",
+                          focusedBorder: OutlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Color.fromARGB(255, 129, 168, 255),
+                                width: 1.2),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderSide:
+                                BorderSide(color: Colors.black, width: 0.1),
+                          ),
+                          suffixIcon: SizedBox.shrink()),
+                    ),
+                    Positioned(
+                      right: 2,
+                      bottom: 3,
+                      child: Container(
+                        margin: const EdgeInsets.all(0),
+                        height: 50,
+                        width: 40,
+                        child: InkWell(
+                          customBorder: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          onTap: () {
+                            // TODO: Send Message
+                          },
+                          child: const Icon(
+                            Icons.send,
+                            color: Color.fromARGB(255, 129, 168, 255),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _commentSection() {
+    DummyComments dummyComments = DummyComments();
+
     return ListView.builder(
-      shrinkWrap: true,
-      itemBuilder: (context, index) {},
+        shrinkWrap: true,
+        itemCount: dummyComments.comments.length,
+        itemBuilder: (context, index) {
+          return SizedBox(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: SvgPicture.network(
+                    dummyComments.comments[index]["profile_pic"],
+                    height: 60,
+                    width: 60,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Flexible(
+                  fit: FlexFit.tight,
+                  child: Container(
+                    margin: const EdgeInsets.only(left: 20, bottom: 20),
+                    decoration: const BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(color: Colors.black, width: 0.1),
+                      ),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 5),
+                          child: Text.rich(
+                            TextSpan(
+                                text: dummyComments.comments[index]["username"],
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: "  •  ${dummyComments.comments[index]["day"]}",
+                                    style: GoogleFonts.rubik(
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.grey,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ]),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 10),
+                          child: Text(
+                            dummyComments.comments[index]["message"],
+                            style: GoogleFonts.rubik(
+                              textStyle: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 20),
+                          child: Row(
+                            children: [
+                              Text(
+                                "${dummyComments.comments[index]["like"]} Like   •   ",
+                                style: GoogleFonts.rubik(
+                                  textStyle: const TextStyle(
+                                      fontSize: 14, color: Colors.grey),
+                                ),
+                              ),
+                              const Icon(
+                                Icons.thumb_up,
+                                color: Colors.grey,
+                                size: 18,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
     );
   }
 }
