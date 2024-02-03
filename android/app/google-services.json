@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "219186194521",
+    "firebase_url": "https://khip01-comment-section-default-rtdb.firebaseio.com",
     "project_id": "khip01-comment-section",
     "storage_bucket": "khip01-comment-section.appspot.com"
   },
