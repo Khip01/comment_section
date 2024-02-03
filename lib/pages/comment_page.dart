@@ -5,8 +5,12 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../object/user.dart';
+
 class CommentPage extends StatefulWidget {
-  const CommentPage({super.key});
+  final User user;
+
+  const CommentPage({super.key, required this.user});
 
   @override
   State<CommentPage> createState() => _CommentPageState();
@@ -250,7 +254,7 @@ class _CommentPageState extends State<CommentPage> {
             ClipRRect(
               borderRadius: BorderRadius.circular(100),
               child: SvgPicture.network(
-                "https://api.dicebear.com/7.x/thumbs/svg?seed=khip01",
+                "https://api.dicebear.com/7.x/thumbs/svg?seed=${widget.user.username}",
                 height: 60,
                 width: 60,
                 fit: BoxFit.cover,
@@ -268,18 +272,18 @@ class _CommentPageState extends State<CommentPage> {
                       style: GoogleFonts.rubik(
                         textStyle: const TextStyle(fontWeight: FontWeight.w300),
                       ),
-                      decoration: const InputDecoration(
-                          hintText: "Add a comment...",
-                          focusedBorder: OutlineInputBorder(
+                      decoration: InputDecoration(
+                          hintText: "Add a comment as ${widget.user.username} ...",
+                          focusedBorder: const OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Color.fromARGB(255, 129, 168, 255),
                                 width: 1.2),
                           ),
-                          enabledBorder: OutlineInputBorder(
+                          enabledBorder: const OutlineInputBorder(
                             borderSide:
                                 BorderSide(color: Colors.black, width: 0.1),
                           ),
-                          suffixIcon: SizedBox.shrink()),
+                          suffixIcon: const SizedBox.shrink()),
                     ),
                     Positioned(
                       right: 2,
