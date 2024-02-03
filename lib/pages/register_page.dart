@@ -1,7 +1,11 @@
+import 'package:comment_section/controller/user_account_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:email_validator/email_validator.dart';
+
+import '../object/user.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -11,20 +15,32 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<RegisterPage> {
-  final GlobalKey _formKey = GlobalKey(); // FormKey Validation
+  // DB Controller
+  final UserController _userController = UserController();
 
-  final OverlayPortalController _emailToolTip =
-      OverlayPortalController(); // For Email OverlayController
+  // Agreement Checkbox
+  bool agreementIsCheck = false;
+
+  // FormKey Validation
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  // Text Controller
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+
+  // Text Error
+  String? _errorEmailText;
+  String? _errorUsernameText;
+
+  // Bubble Effect
+  final OverlayPortalController _emailToolTip = OverlayPortalController(); // For Email OverlayController
   final _linkEmail = LayerLink(); // For CompositedTransform Email Link
 
-  final OverlayPortalController _usernameToolTip =
-      OverlayPortalController(); // For Username OverlayController
+  final OverlayPortalController _usernameToolTip = OverlayPortalController(); // For Username OverlayController
   final _linkUsername = LayerLink(); // For CompositedTransform Username Link
 
-  final OverlayPortalController _agreementTooltip =
-      OverlayPortalController(); // For agreement OverlayController
+  final OverlayPortalController _agreementTooltip = OverlayPortalController(); // For agreement OverlayController
   final _linkAgreement = LayerLink(); // For CompositedTransform agreement Link
-  bool agreementIsCheck = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +66,7 @@ class _LoginPageState extends State<RegisterPage> {
                       child: _arrowBack(),
                     ),
                     Flexible(
-                      flex: 10,
+                      flex: 12,
                       child: _formSection(),
                     ),
                   ],
@@ -86,7 +102,7 @@ class _LoginPageState extends State<RegisterPage> {
 
   Widget _formSection() {
     return Container(
-      padding: const EdgeInsets.only(top: 40),
+      padding: const EdgeInsets.only(top: 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -114,8 +130,21 @@ class _LoginPageState extends State<RegisterPage> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 20),
             child: TextFormField(
+              controller: _emailController,
+              validator: (value){
+                if(value == null || value.isEmpty) {
+                  return "This field is required";
+                } else {
+                  if (!EmailValidator.validate(value)){
+                    return "Please enter a valid email";
+                  } else {
+                      return null;
+                  }
+                }
+              },
               style: GoogleFonts.rubik(),
               decoration: InputDecoration(
+                errorText: _errorEmailText,
                 hintText: "Email",
                 focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -164,8 +193,17 @@ class _LoginPageState extends State<RegisterPage> {
           Padding(
             padding: const EdgeInsets.only(bottom: 20),
             child: TextFormField(
+              controller: _usernameController,
+              validator: (value){
+                if (value == null || value.isEmpty) {
+                  return "This field is required";
+                } else {
+                  return null;
+                }
+              },
               style: GoogleFonts.rubik(),
               decoration: InputDecoration(
+                errorText: _errorUsernameText,
                 hintText: "Username Custom",
                 focusedBorder: const UnderlineInputBorder(
                   borderSide: BorderSide(
@@ -288,8 +326,33 @@ class _LoginPageState extends State<RegisterPage> {
               width: 120,
               height: 40,
               child: ElevatedButton(
-                onPressed: agreementIsCheck ? () {
-                  context.goNamed("comment_page");
+                onPressed: agreementIsCheck ? () async {
+                  if (_formKey.currentState!.validate()){
+                    bool emailAlreadyExist = await _userController.checkEmailAlreadyExist(_emailController.text);
+                    bool usernameAlreadyExist = await _userController.checkUsernameAlreadyExist(_usernameController.text);
+
+                    setState(() {
+                      // check if email already exist
+                      if(emailAlreadyExist){
+                        _errorEmailText = "Email Already Exist";
+                      } else {
+                        _errorEmailText = null;
+                      }
+                      // check if username already exist
+                      if(usernameAlreadyExist){
+                        _errorUsernameText = "Username Already Exist";
+                      } else {
+                        _errorUsernameText = null;
+                      }
+                    });
+
+                    if (_errorUsernameText != null || _errorEmailText != null) {
+                      return;
+                    }
+                    // do register
+                    _userController.createAccount(_usernameController.text, _emailController.text);
+                    context.goNamed("comment_page", extra: User(_usernameController.text));
+                  }
                 } : null,
                 style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
