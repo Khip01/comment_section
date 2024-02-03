@@ -49,6 +49,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '219186194521',
     projectId: 'khip01-comment-section',
     authDomain: 'khip01-comment-section.firebaseapp.com',
+    databaseURL: "https://khip01-comment-section-default-rtdb.firebaseio.com",
     storageBucket: 'khip01-comment-section.appspot.com',
     measurementId: 'G-WRWZKK32D5',
   );
