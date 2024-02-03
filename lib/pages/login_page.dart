@@ -1,3 +1,6 @@
+import 'package:comment_section/controller/user_account_controller.dart';
+import 'package:comment_section/object/user.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -10,7 +13,17 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  final GlobalKey _formKey = GlobalKey();
+  // Controller
+  final UserController _userController = UserController();
+
+  // Form Key
+  final GlobalKey<FormState> _formKey = GlobalKey();
+
+  // Error text
+  String? _errorEmailText;
+
+  // Email Controller
+  final TextEditingController _emailController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +91,29 @@ class _LoginPageState extends State<LoginPage> {
                             Padding(
                               padding: const EdgeInsets.symmetric(vertical: 20),
                               child: TextFormField(
+                                controller: _emailController,
+                                validator: (value) {
+                                  if (value == null || value.isEmpty){
+                                    return "This field is required";
+                                  } else {
+                                    if (!EmailValidator.validate(value)){
+                                      return "Please enter a valid email";
+                                    } else {
+                                      return null;
+                                    }
+                                  }
+                                },
                                 style: GoogleFonts.rubik(),
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
+                                  errorText: _errorEmailText,
                                   hintText: "Your Email",
-                                  focusedBorder: UnderlineInputBorder(
+                                  focusedBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
                                             Color.fromARGB(255, 129, 168, 255),
                                         width: 2),
                                   ),
-                                  enabledBorder: UnderlineInputBorder(
+                                  enabledBorder: const UnderlineInputBorder(
                                     borderSide: BorderSide(
                                         color:
                                             Color.fromARGB(255, 129, 168, 255),
@@ -102,8 +128,21 @@ class _LoginPageState extends State<LoginPage> {
                                 width: 120,
                                 height: 40,
                                 child: ElevatedButton(
-                                  onPressed: () {
-                                    context.goNamed("comment_page");
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      String? username = await _userController.getUsernameFrom(_emailController.text);
+
+                                      setState(() {
+                                        if (username == null || username.isEmpty) {
+                                          _errorEmailText = "Account has not been registered";
+                                          return;
+                                        } else {
+                                          _errorEmailText = null;
+                                        }
+                                      });
+
+                                      context.goNamed("comment_page", extra: User(username!));
+                                    }
                                   },
                                   style: ElevatedButton.styleFrom(
                                     shape: RoundedRectangleBorder(
