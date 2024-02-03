@@ -1,3 +1,4 @@
+import 'package:comment_section/object/user.dart';
 import 'package:comment_section/pages/comment_page.dart';
 import 'package:comment_section/pages/landing_page.dart';
 import 'package:comment_section/pages/login_page.dart';
@@ -48,7 +49,13 @@ class MyApp extends StatelessWidget {
       path: "/",
       name: "comment_page",
       builder: (context, state) {
-        return const CommentPage();
+        Object? object = state.extra;
+
+        if (object != null && object is User){
+          return CommentPage(user: object);
+        } else {
+          return const LandingPage();
+        }
       },
     ),
   ], initialLocation: "/welcome", debugLogDiagnostics: true, routerNeglect: true);
