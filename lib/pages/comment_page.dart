@@ -1,5 +1,8 @@
-import 'package:comment_section/dummy_data/dummy_comments.dart';
+import 'package:comment_section/controller/comments_controller.dart';
+import 'package:comment_section/controller/user_account_controller.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -25,46 +28,81 @@ const List<String> sortList = <String>[
 String sortValue = sortList.first;
 
 class _CommentPageState extends State<CommentPage> {
+  final UserController _userController = UserController();
+  final CommentController _commentController = CommentController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Container(
-            width: double.maxFinite,
-            height: 400,
-            decoration: const BoxDecoration(
-              // color: Colors.red
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color.fromARGB(255, 206, 221, 255),
-                  Color.fromARGB(0, 206, 221, 255),
-                ],
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-              // margin: const EdgeInsets.symmetric(horizontal: 40),
-              // width: 1315,
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 115),
-                children: [
-                  _titleSection(),
-                  _headingSection(),
-                  _menuSection(),
-                  _myCommentSection(),
-                  _commentSection(),
-                ],
-              ),
-            ),
-          ),
-        ],
+      body: StreamBuilder(
+        stream: _userController.database.ref().child("comments").onValue,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return _bodyPageError();
+          } else {
+            switch (snapshot.connectionState) {
+              case ConnectionState.none:
+                return _bodyPageShimmer();
+              case ConnectionState.waiting:
+                return _bodyPageShimmer();
+              case ConnectionState.active:
+                Map<String, dynamic> comments = snapshot.data!.snapshot.value as Map<String, dynamic>;
+                return _bodyPage(comments, comments.keys.toList());
+              case ConnectionState.done:
+                Map<String, dynamic> comments = snapshot.data!.snapshot.value as Map<String, dynamic>;
+                return _bodyPage(comments, comments.keys.toList());
+            }
+          }
+        },
       ),
     );
+  }
+
+  Widget _bodyPage(Map<String, dynamic> comments, List<String> keysComment) {
+    return Stack(
+      children: [
+        Container(
+          width: double.maxFinite,
+          height: 400,
+          decoration: const BoxDecoration(
+            // color: Colors.red
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color.fromARGB(255, 206, 221, 255),
+                Color.fromARGB(0, 206, 221, 255),
+              ],
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.center,
+          child: SizedBox(
+            // margin: const EdgeInsets.symmetric(horizontal: 40),
+            // width: 1315,
+            child: ListView(
+              padding: const EdgeInsets.symmetric(horizontal: 115),
+              children: [
+                _titleSection(),
+                _headingSection(comments),
+                _menuSection(),
+                _myCommentSection(),
+                _commentSection(keysComment),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _bodyPageError() {
+    return SizedBox();
+  }
+
+  Widget _bodyPageShimmer() {
+    return SizedBox();
   }
 
   Widget _titleSection() {
@@ -85,7 +123,7 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _headingSection() {
+  Widget _headingSection(Map<String, dynamic> comments) {
     return Container(
       padding: const EdgeInsets.only(bottom: 20),
       decoration: const BoxDecoration(
@@ -100,7 +138,7 @@ class _CommentPageState extends State<CommentPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Comments (6)",
+            "Comments (${comments.length})",
             style: GoogleFonts.rubik(
               textStyle: const TextStyle(
                 fontSize: 24,
@@ -316,13 +354,13 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _commentSection() {
-    DummyComments dummyComments = DummyComments();
+  Widget _commentSection(List<String> keysComment) {
+    return FirebaseAnimatedList(
+      query: _commentController.getCommentsQueryFromDB(),
+      shrinkWrap: true,
+      itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
+        Map<String, dynamic> firebaseComments = snapshot.value as Map<String, dynamic>;
 
-    return ListView.builder(
-        shrinkWrap: true,
-        itemCount: dummyComments.comments.length,
-        itemBuilder: (context, index) {
           return SizedBox(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +368,7 @@ class _CommentPageState extends State<CommentPage> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
                   child: SvgPicture.network(
-                    dummyComments.comments[index]["profile_pic"],
+                    "https://api.dicebear.com/7.x/thumbs/svg?seed=${firebaseComments["username"]}",
                     height: 60,
                     width: 60,
                     fit: BoxFit.cover,
@@ -352,7 +390,7 @@ class _CommentPageState extends State<CommentPage> {
                           padding: const EdgeInsets.only(bottom: 5),
                           child: Text.rich(
                             TextSpan(
-                                text: dummyComments.comments[index]["username"],
+                                text: firebaseComments["username"],
                                 style: GoogleFonts.rubik(
                                   textStyle: const TextStyle(
                                     fontWeight: FontWeight.bold,
@@ -361,7 +399,7 @@ class _CommentPageState extends State<CommentPage> {
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: "  •  ${dummyComments.comments[index]["day"]}",
+                                    text: "  •  ${firebaseComments["date_time"]}",
                                     style: GoogleFonts.rubik(
                                       textStyle: const TextStyle(
                                         fontWeight: FontWeight.w400,
@@ -376,7 +414,7 @@ class _CommentPageState extends State<CommentPage> {
                         Padding(
                           padding: const EdgeInsets.only(bottom: 10),
                           child: Text(
-                            dummyComments.comments[index]["message"],
+                            firebaseComments["message"],
                             style: GoogleFonts.rubik(
                               textStyle: const TextStyle(fontSize: 16),
                             ),
@@ -387,16 +425,25 @@ class _CommentPageState extends State<CommentPage> {
                           child: Row(
                             children: [
                               Text(
-                                "${dummyComments.comments[index]["like"]} Like   •   ",
+                                "${firebaseComments["like"]?.length ?? 0} Like   •   ",
                                 style: GoogleFonts.rubik(
                                   textStyle: const TextStyle(
                                       fontSize: 14, color: Colors.grey),
                                 ),
                               ),
-                              const Icon(
-                                Icons.thumb_up,
-                                color: Colors.grey,
-                                size: 18,
+                              InkWell(
+                                onTap: () {
+                                  if (firebaseComments["like"]?[widget.user.username] ?? false) {
+                                    _commentController.likeTheComment(keysComment[index], false, widget.user.username);
+                                  } else {
+                                    _commentController.likeTheComment(keysComment[index], true, widget.user.username);
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.thumb_up,
+                                  color: (firebaseComments["like"]?[widget.user.username] ?? false) ? const Color.fromARGB(255, 129, 168, 255) : Colors.grey,
+                                  size: 18,
+                                ),
                               ),
                             ],
                           ),
