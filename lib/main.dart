@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       path: "/welcome",
       name: "landing_page",
       builder: (context, state) {
-        return LandingPage();
+        return const LandingPage();
       },
       routes: [
         GoRoute(
