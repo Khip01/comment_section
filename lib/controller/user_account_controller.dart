@@ -1,16 +1,12 @@
 import 'package:firebase_database/firebase_database.dart';
 
-// Initial Database Default
-FirebaseDatabase database = FirebaseDatabase.instance;
-
 class UserController {
+  // Initial Database Default
+  FirebaseDatabase database = FirebaseDatabase.instance;
 
   Future<void> createAccount(String username, String email) async {
     // Initial Database Reference
     DatabaseReference ref = database.ref("user/$username");
-
-    // save
-
     await ref.set({
       "email"   : email,
     });
@@ -36,7 +32,7 @@ class UserController {
     if (snapshot.exists) {
       Map<String, dynamic> data = snapshot.value as Map<String, dynamic>;
       for (String key in data.keys) {
-        if (key == username) {
+        if (key.toLowerCase() == username.toLowerCase()) {
           return true;
         }
       }
