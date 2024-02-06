@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
       path: "/welcome",
       name: "landing_page",
       builder: (context, state) {
-        return const LandingPage();
+        return LandingPage();
       },
       routes: [
         GoRoute(
@@ -54,7 +54,7 @@ class MyApp extends StatelessWidget {
         if (object != null && object is User){
           return CommentPage(user: object);
         } else {
-          return const LandingPage();
+          return LandingPage();
         }
       },
     ),
