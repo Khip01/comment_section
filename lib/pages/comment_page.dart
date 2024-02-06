@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 import '../object/user.dart';
 
@@ -19,17 +20,16 @@ class CommentPage extends StatefulWidget {
   State<CommentPage> createState() => _CommentPageState();
 }
 
-const List<String> sortList = <String>[
-  "Recently",
-  "Oldest",
-  "Most Liked",
-];
 
-String sortValue = sortList.first;
+final UserController _userController = UserController();
+final CommentController _commentController = CommentController();
+
+String sortValue = _commentController.sortList.first;
 
 class _CommentPageState extends State<CommentPage> {
-  final UserController _userController = UserController();
-  final CommentController _commentController = CommentController();
+
+  // Text Controller
+  TextEditingController commentFieldController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _CommentPageState extends State<CommentPage> {
       body: StreamBuilder(
         stream: _userController.database.ref().child("comments").onValue,
         builder: (context, snapshot) {
-          if (snapshot.hasError) {
+          if (snapshot.hasError || !snapshot.hasData) {
             return _bodyPageError();
           } else {
             switch (snapshot.connectionState) {
@@ -46,11 +46,11 @@ class _CommentPageState extends State<CommentPage> {
               case ConnectionState.waiting:
                 return _bodyPageShimmer();
               case ConnectionState.active:
-                Map<String, dynamic> comments = snapshot.data!.snapshot.value as Map<String, dynamic>;
-                return _bodyPage(comments, comments.keys.toList());
+                Map<String, dynamic>? comments = (snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<String, dynamic>?;
+                return _bodyPage(comments, comments?.keys.toList());
               case ConnectionState.done:
-                Map<String, dynamic> comments = snapshot.data!.snapshot.value as Map<String, dynamic>;
-                return _bodyPage(comments, comments.keys.toList());
+                Map<String, dynamic>? comments = (snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<String, dynamic>?;
+                return _bodyPage(comments, comments?.keys.toList());
             }
           }
         },
@@ -58,7 +58,7 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _bodyPage(Map<String, dynamic> comments, List<String> keysComment) {
+  Widget _bodyPage(Map<String, dynamic>? comments, List<String>? keysComment) {
     return Stack(
       children: [
         Container(
@@ -123,7 +123,7 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _headingSection(Map<String, dynamic> comments) {
+  Widget _headingSection(Map<String, dynamic>? comments) {
     return Container(
       padding: const EdgeInsets.only(bottom: 20),
       decoration: const BoxDecoration(
@@ -138,7 +138,7 @@ class _CommentPageState extends State<CommentPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            "Comments (${comments.length})",
+            "Comments (${comments?.length ?? 0})",
             style: GoogleFonts.rubik(
               textStyle: const TextStyle(
                 fontSize: 24,
@@ -191,7 +191,7 @@ class _CommentPageState extends State<CommentPage> {
                 ),
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton2<String>(
-                    items: sortList
+                    items: _commentController.sortList
                         .map<DropdownMenuItem<String>>((String value) =>
                             DropdownMenuItem<String>(
                               value: value,
@@ -305,6 +305,7 @@ class _CommentPageState extends State<CommentPage> {
                 child: Stack(
                   children: [
                     TextFormField(
+                      controller: commentFieldController,
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       style: GoogleFonts.rubik(
@@ -335,7 +336,9 @@ class _CommentPageState extends State<CommentPage> {
                             borderRadius: BorderRadius.circular(10),
                           ),
                           onTap: () {
-                            // TODO: Send Message
+                            if (commentFieldController.text.isNotEmpty) {
+                              _commentController.writeComment(widget.user.username, commentFieldController.text).then((_) => commentFieldController.clear());
+                            }
                           },
                           child: const Icon(
                             Icons.send,
@@ -354,9 +357,9 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _commentSection(List<String> keysComment) {
+  Widget _commentSection(List<String>? keysComment) {
     return FirebaseAnimatedList(
-      query: _commentController.getCommentsQueryFromDB(),
+      query: _commentController.getCommentsQueryFromDB(sortValue),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
         Map<String, dynamic> firebaseComments = snapshot.value as Map<String, dynamic>;
@@ -399,7 +402,7 @@ class _CommentPageState extends State<CommentPage> {
                                 ),
                                 children: [
                                   TextSpan(
-                                    text: "  •  ${firebaseComments["date_time"]}",
+                                    text: "  •  ${timeago.format(DateTime.fromMillisecondsSinceEpoch(int.parse(firebaseComments["date_time"])))}",
                                     style: GoogleFonts.rubik(
                                       textStyle: const TextStyle(
                                         fontWeight: FontWeight.w400,
@@ -425,7 +428,7 @@ class _CommentPageState extends State<CommentPage> {
                           child: Row(
                             children: [
                               Text(
-                                "${firebaseComments["like"]?.length ?? 0} Like   •   ",
+                                "${(firebaseComments["likeCount"] != 0) ? firebaseComments["likeCount"] * -1 : 0} Like   •   ",
                                 style: GoogleFonts.rubik(
                                   textStyle: const TextStyle(
                                       fontSize: 14, color: Colors.grey),
@@ -434,9 +437,9 @@ class _CommentPageState extends State<CommentPage> {
                               InkWell(
                                 onTap: () {
                                   if (firebaseComments["like"]?[widget.user.username] ?? false) {
-                                    _commentController.likeTheComment(keysComment[index], false, widget.user.username);
+                                    _commentController.likeTheComment(firebaseComments["index"], false, widget.user.username);
                                   } else {
-                                    _commentController.likeTheComment(keysComment[index], true, widget.user.username);
+                                    _commentController.likeTheComment(firebaseComments["index"], true, widget.user.username);
                                   }
                                 },
                                 child: Icon(
