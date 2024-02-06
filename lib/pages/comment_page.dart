@@ -1,5 +1,6 @@
 import 'package:comment_section/controller/comments_controller.dart';
 import 'package:comment_section/controller/user_account_controller.dart';
+import 'package:comment_section/utils/utils.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
@@ -27,6 +28,7 @@ final CommentController _commentController = CommentController();
 String sortValue = _commentController.sortList.first;
 
 class _CommentPageState extends State<CommentPage> {
+  Utils utils = Utils();
 
   // Text Controller
   TextEditingController commentFieldController = TextEditingController();
@@ -34,31 +36,45 @@ class _CommentPageState extends State<CommentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: StreamBuilder(
-        stream: _userController.database.ref().child("comments").onValue,
-        builder: (context, snapshot) {
-          if (snapshot.hasError || !snapshot.hasData) {
-            return _bodyPageError();
-          } else {
-            switch (snapshot.connectionState) {
-              case ConnectionState.none:
-                return _bodyPageShimmer();
-              case ConnectionState.waiting:
-                return _bodyPageShimmer();
-              case ConnectionState.active:
-                Map<String, dynamic>? comments = (snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<String, dynamic>?;
-                return _bodyPage(comments, comments?.keys.toList());
-              case ConnectionState.done:
-                Map<String, dynamic>? comments = (snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<String, dynamic>?;
-                return _bodyPage(comments, comments?.keys.toList());
+      body: LayoutBuilder(
+          builder: (context, constraints) {
+            if(constraints.maxWidth >= 1100){ // Extended
+              return _mainPage(utils.screenTypes[2]);
+            } else if (constraints.maxWidth >= 600 && constraints.maxWidth < 1100) { // Medium
+              return _mainPage(utils.screenTypes[1]);
+            } else { // Compact
+              return _mainPage(utils.screenTypes[0]);
             }
-          }
-        },
+          },
       ),
     );
   }
 
-  Widget _bodyPage(Map<String, dynamic>? comments, List<String>? keysComment) {
+  Widget _mainPage(String screenType) {
+    return StreamBuilder(
+      stream: _userController.database.ref().child("comments").onValue,
+      builder: (context, snapshot) {
+        if (snapshot.hasError || !snapshot.hasData) {
+          return _bodyPageError();
+        } else {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              return _bodyPageShimmer();
+            case ConnectionState.waiting:
+              return _bodyPageShimmer();
+            case ConnectionState.active:
+              Map<String, dynamic>? comments = (snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<String, dynamic>?;
+              return _bodyPage(comments, comments?.keys.toList(), screenType);
+            case ConnectionState.done:
+              Map<String, dynamic>? comments = (snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<String, dynamic>?;
+              return _bodyPage(comments, comments?.keys.toList(), screenType);
+          }
+        }
+      },
+    );
+  }
+
+  Widget _bodyPage(Map<String, dynamic>? comments, List<String>? keysComment, String screenType) {
     return Stack(
       children: [
         Container(
@@ -82,11 +98,11 @@ class _CommentPageState extends State<CommentPage> {
             // margin: const EdgeInsets.symmetric(horizontal: 40),
             // width: 1315,
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 115),
+              padding: EdgeInsets.symmetric(horizontal: utils.responsive(20, 40, 115, screenType)),
               children: [
                 _titleSection(),
                 _headingSection(comments),
-                _menuSection(),
+                _menuSection(screenType),
                 _myCommentSection(),
                 _commentSection(keysComment),
               ],
@@ -98,11 +114,11 @@ class _CommentPageState extends State<CommentPage> {
   }
 
   Widget _bodyPageError() {
-    return SizedBox();
+    return const SizedBox();
   }
 
   Widget _bodyPageShimmer() {
-    return SizedBox();
+    return const SizedBox();
   }
 
   Widget _titleSection() {
@@ -160,7 +176,7 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _menuSection() {
+  Widget _menuSection(String screenType) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 20),
       height: 80,
@@ -230,19 +246,27 @@ class _CommentPageState extends State<CommentPage> {
             ],
           ),
           SizedBox(
-            width: 320,
+            width: utils.responsive(null, 320, 320, screenType),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  "Done with the commenting?",
-                  style: GoogleFonts.rubik(
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 100, 119, 166),
+                utils.responsive(const SizedBox(),
+                  Text("Done with the commenting?",
+                    style: GoogleFonts.rubik(
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 100, 119, 166),
+                      ),
                     ),
                   ),
-                ),
+                  Text("Done with the commenting?",
+                    style: GoogleFonts.rubik(
+                      textStyle: const TextStyle(
+                        fontSize: 16,
+                        color: Color.fromARGB(255, 100, 119, 166),
+                      ),
+                    ),
+                  ), screenType),
                 InkWell(
                   onTap: () {
                     context.goNamed("landing_page");
