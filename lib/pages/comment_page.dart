@@ -33,6 +33,15 @@ class _CommentPageState extends State<CommentPage> {
   // Text Controller
   TextEditingController commentFieldController = TextEditingController();
 
+  // Stream
+  Stream? _stream;
+
+  @override
+  void initState() {
+    _stream = _userController.database.ref().child("comments").onValue;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +63,7 @@ class _CommentPageState extends State<CommentPage> {
 
   Widget _mainPage(String screenType) {
     return StreamBuilder(
-      stream: _userController.database.ref().child("comments").onValue,
+      stream: _stream!,
       builder: (context, snapshot) {
         if (snapshot.hasError || !snapshot.hasData) {
           return _bodyPageError();
@@ -125,7 +134,7 @@ class _CommentPageState extends State<CommentPage> {
 
   Widget _titleSection(String screenType) {
     return SizedBox(
-      height: 90,
+      height: utils.responsive(75, 80, 85, 90, screenType),
       child: Align(
           alignment: Alignment.bottomCenter,
           child: Text(
@@ -143,13 +152,13 @@ class _CommentPageState extends State<CommentPage> {
 
   Widget _headingSection(Map<String, dynamic>? comments, String screenType) {
     return Container(
-      padding: EdgeInsets.only(bottom: utils.responsive(14, 16, 18, 20, screenType)),
+      padding: EdgeInsets.only(bottom: utils.responsive(16, 16, 18, 20, screenType)),
       decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(color: Colors.black, width: utils.responsive(0.1, 0.1, 0.1, 0.2, screenType)),
         ),
       ),
-      height: 100,
+      height: utils.responsive(85, 90, 95, 100, screenType),
       width: double.maxFinite,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -159,7 +168,7 @@ class _CommentPageState extends State<CommentPage> {
             "Comments (${comments?.length ?? 0})",
             style: GoogleFonts.rubik(
               textStyle: TextStyle(
-                fontSize: utils.responsive(18, 20, 22, 24, screenType),
+                fontSize: utils.responsive(20, 20, 22, 24, screenType),
                 color: const Color.fromARGB(255, 47, 61, 94),
               ),
             ),
@@ -168,7 +177,7 @@ class _CommentPageState extends State<CommentPage> {
             "Start a discussion, not a fire. Post with kindness.",
             style: GoogleFonts.rubik(
               textStyle: TextStyle(
-                fontSize: utils.responsive(12, 14, 16, 18, screenType),
+                fontSize: utils.responsive(14, 14, 16, 18, screenType),
                 color: const Color.fromARGB(255, 60, 81, 128),
               ),
             ),
@@ -180,8 +189,8 @@ class _CommentPageState extends State<CommentPage> {
 
   Widget _menuSection(String screenType) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: utils.responsive(14, 16, 18, 20, screenType)),
-      height: utils.responsive(50, 60, 70, 80, screenType),
+      padding: EdgeInsets.symmetric(vertical: utils.responsive(16, 16, 18, 20, screenType)),
+      height: utils.responsive(60, 60, 70, 80, screenType),
       width: double.maxFinite,
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -190,12 +199,12 @@ class _CommentPageState extends State<CommentPage> {
           Row(
             children: [
               Padding(
-                padding: EdgeInsets.only(right: utils.responsive(7, 8, 9, 10, screenType)),
+                padding: EdgeInsets.only(right: utils.responsive(8, 8, 9, 10, screenType)),
                 child: Text(
                   "Sort by",
                   style: GoogleFonts.rubik(
                     textStyle: TextStyle(
-                      fontSize: utils.responsive(10, 12, 14, 16, screenType),
+                      fontSize: utils.responsive(12, 12, 14, 16, screenType),
                       color: const Color.fromARGB(255, 100, 119, 166),
                     ),
                   ),
@@ -219,7 +228,7 @@ class _CommentPageState extends State<CommentPage> {
                                 style: GoogleFonts.rubik(
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    fontSize: utils.responsive(10, 12, 14, 16, screenType),
+                                    fontSize: utils.responsive(12, 12, 14, 16, screenType),
                                     color: const Color.fromARGB(255, 100, 119, 166),
                                   ),
                                 ),
@@ -237,7 +246,7 @@ class _CommentPageState extends State<CommentPage> {
                     ),
                     buttonStyleData: ButtonStyleData(
                       height: 30,
-                      width: utils.responsive(90, 100, 110, 120, screenType),
+                      width: utils.responsive(100, 100, 110, 120, screenType),
                     ),
                     menuItemStyleData: const MenuItemStyleData(
                       height: 40,
@@ -274,20 +283,20 @@ class _CommentPageState extends State<CommentPage> {
                     context.goNamed("landing_page");
                   },
                   child: SizedBox(
-                    width: utils.responsive(60, 70, 80, 90, screenType),
+                    width: utils.responsive(70, 70, 80, 90, screenType),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Icon(
                           Icons.logout,
                           color: const Color.fromARGB(255, 100, 119, 166),
-                          size: utils.responsive(18, 20, 22, 24, screenType),
+                          size: utils.responsive(20, 20, 22, 24, screenType),
                         ),
                         Text(
                           "Logout",
                           style: GoogleFonts.rubik(
                             textStyle: TextStyle(
-                              fontSize: utils.responsive(10, 12, 14, 16, screenType),
+                              fontSize: utils.responsive(12, 12, 14, 16, screenType),
                               fontWeight: FontWeight.w500,
                               color: const Color.fromARGB(255, 100, 119, 166),
                             ),
@@ -320,8 +329,8 @@ class _CommentPageState extends State<CommentPage> {
               borderRadius: BorderRadius.circular(100),
               child: SvgPicture.network(
                 "https://api.dicebear.com/7.x/thumbs/svg?seed=${widget.user.username}",
-                height: utils.responsive(48, 50, 50, 60, screenType),
-                width: utils.responsive(48, 50, 50, 60, screenType),
+                height: utils.responsive(50, 50, 50, 60, screenType),
+                width: utils.responsive(50, 50, 50, 60, screenType),
                 fit: BoxFit.cover,
               ),
             ),
@@ -336,7 +345,7 @@ class _CommentPageState extends State<CommentPage> {
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       style: GoogleFonts.rubik(
-                        textStyle: TextStyle(fontWeight: FontWeight.w300, fontSize: utils.responsive(10, 12, 14, 16, screenType)),
+                        textStyle: TextStyle(fontWeight: FontWeight.w300, fontSize: utils.responsive(12, 12, 14, 16, screenType)),
                       ),
                       decoration: InputDecoration(
                           hintText: "Add a comment as ${widget.user.username} ...",
@@ -354,7 +363,7 @@ class _CommentPageState extends State<CommentPage> {
                     ),
                     Positioned(
                       right: 2,
-                      bottom: utils.responsive(1, 2, 3, 3, screenType),
+                      bottom: utils.responsive(2, 2, 3, 3, screenType),
                       child: Container(
                         margin: const EdgeInsets.all(0),
                         height: 50,
@@ -401,8 +410,8 @@ class _CommentPageState extends State<CommentPage> {
                   borderRadius: BorderRadius.circular(100),
                   child: SvgPicture.network(
                     "https://api.dicebear.com/7.x/thumbs/svg?seed=${firebaseComments["username"]}",
-                    height: utils.responsive(40, 45, 50, 60, screenType),
-                    width: utils.responsive(40, 45, 50, 60, screenType),
+                    height: utils.responsive(45, 45, 50, 60, screenType),
+                    width: utils.responsive(45, 45, 50, 60, screenType),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -426,7 +435,7 @@ class _CommentPageState extends State<CommentPage> {
                                 style: GoogleFonts.rubik(
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: utils.responsive(10, 12, 14, 16, screenType),
+                                    fontSize: utils.responsive(12, 12, 14, 16, screenType),
                                   ),
                                 ),
                                 children: [
@@ -436,7 +445,7 @@ class _CommentPageState extends State<CommentPage> {
                                       textStyle: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         color: Colors.grey,
-                                        fontSize: utils.responsive(8, 10, 12, 14, screenType),
+                                        fontSize: utils.responsive(10, 10, 12, 14, screenType),
                                       ),
                                     ),
                                   ),
@@ -448,7 +457,7 @@ class _CommentPageState extends State<CommentPage> {
                           child: Text(
                             firebaseComments["message"],
                             style: GoogleFonts.rubik(
-                              textStyle: TextStyle(fontSize: utils.responsive(10, 12, 14, 16, screenType)),
+                              textStyle: TextStyle(fontSize: utils.responsive(12, 12, 14, 16, screenType)),
                             ),
                           ),
                         ),
@@ -460,7 +469,7 @@ class _CommentPageState extends State<CommentPage> {
                                 "${(firebaseComments["likeCount"] != 0) ? (firebaseComments["likeCount"] * -1) : 0} Like   •   ",
                                 style: GoogleFonts.rubik(
                                   textStyle: TextStyle(
-                                      fontSize: utils.responsive(8, 10, 12, 14, screenType), color: Colors.grey),
+                                      fontSize: utils.responsive(10, 10, 12, 14, screenType), color: Colors.grey),
                                 ),
                               ),
                               InkWell(
@@ -474,7 +483,7 @@ class _CommentPageState extends State<CommentPage> {
                                 child: Icon(
                                   Icons.thumb_up,
                                   color: (firebaseComments["like"]?[widget.user.username] ?? false) ? const Color.fromARGB(255, 129, 168, 255) : Colors.grey,
-                                  size: utils.responsive(12, 14, 16, 18, screenType),
+                                  size: utils.responsive(14, 14, 16, 18, screenType),
                                 ),
                               ),
                             ],
