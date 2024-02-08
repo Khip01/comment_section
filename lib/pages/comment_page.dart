@@ -5,7 +5,6 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -35,6 +34,9 @@ class _CommentPageState extends State<CommentPage> {
 
   // Stream
   Stream? _stream;
+
+  // FirebaseAnimatedList
+  var _firebaseKey = Key(DateTime.now().millisecondsSinceEpoch.toString());
 
   @override
   void initState() {
@@ -239,6 +241,7 @@ class _CommentPageState extends State<CommentPage> {
                     onChanged: (value) {
                       setState(() {
                         sortValue = value!;
+                        _firebaseKey = Key(DateTime.now().millisecondsSinceEpoch.toString());
                       });
                     },
                     dropdownStyleData: const DropdownStyleData(
@@ -327,10 +330,10 @@ class _CommentPageState extends State<CommentPage> {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(100),
-              child: SvgPicture.network(
-                "https://api.dicebear.com/7.x/thumbs/svg?seed=${widget.user.username}",
-                height: utils.responsive(50, 50, 50, 60, screenType),
-                width: utils.responsive(50, 50, 50, 60, screenType),
+              child: Image.network(
+                "https://api.dicebear.com/7.x/thumbs/jpg?seed=${widget.user.username}",
+                height: utils.responsive(55, 55, 50, 60, screenType),
+                width: utils.responsive(55, 55, 50, 60, screenType),
                 fit: BoxFit.cover,
               ),
             ),
@@ -397,6 +400,7 @@ class _CommentPageState extends State<CommentPage> {
   Widget _commentSection(List<String>? keysComment, screenType) {
     return FirebaseAnimatedList(
       physics: const NeverScrollableScrollPhysics(),
+      key: _firebaseKey,
       query: _commentController.getCommentsQueryFromDB(sortValue),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
@@ -408,8 +412,8 @@ class _CommentPageState extends State<CommentPage> {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: SvgPicture.network(
-                    "https://api.dicebear.com/7.x/thumbs/svg?seed=${firebaseComments["username"]}",
+                  child: Image.network(
+                    "https://api.dicebear.com/7.x/thumbs/jpg?seed=${firebaseComments["username"]}",
                     height: utils.responsive(45, 45, 50, 60, screenType),
                     width: utils.responsive(45, 45, 50, 60, screenType),
                     fit: BoxFit.cover,
