@@ -39,10 +39,12 @@ class _CommentPageState extends State<CommentPage> {
       body: LayoutBuilder(
           builder: (context, constraints) {
             if(constraints.maxWidth >= 1100){ // Extended
-              return _mainPage(utils.screenTypes[2]);
+              return _mainPage(utils.screenTypes[3]);
             } else if (constraints.maxWidth >= 600 && constraints.maxWidth < 1100) { // Medium
+              return _mainPage(utils.screenTypes[2]);
+            } else if (constraints.maxWidth > 480 && constraints.maxWidth < 600) { // Compact
               return _mainPage(utils.screenTypes[1]);
-            } else { // Compact
+            } else { // Very Compact
               return _mainPage(utils.screenTypes[0]);
             }
           },
@@ -98,13 +100,13 @@ class _CommentPageState extends State<CommentPage> {
             // margin: const EdgeInsets.symmetric(horizontal: 40),
             // width: 1315,
             child: ListView(
-              padding: EdgeInsets.symmetric(horizontal: utils.responsive(20, 40, 115, screenType)),
+              padding: EdgeInsets.symmetric(horizontal: utils.responsive(20, 20, 40, 115, screenType)),
               children: [
-                _titleSection(),
-                _headingSection(comments),
+                _titleSection(screenType),
+                _headingSection(comments, screenType),
                 _menuSection(screenType),
-                _myCommentSection(),
-                _commentSection(keysComment),
+                _myCommentSection(screenType),
+                _commentSection(keysComment, screenType),
               ],
             ),
           ),
@@ -121,7 +123,7 @@ class _CommentPageState extends State<CommentPage> {
     return const SizedBox();
   }
 
-  Widget _titleSection() {
+  Widget _titleSection(String screenType) {
     return SizedBox(
       height: 90,
       child: Align(
@@ -129,22 +131,22 @@ class _CommentPageState extends State<CommentPage> {
           child: Text(
             "COMMENT SECTION",
             style: GoogleFonts.rubik(
-              textStyle: const TextStyle(
-                fontSize: 36,
+              textStyle: TextStyle(
+                fontSize: utils.responsive(28, 32, 34, 36, screenType),
                 fontWeight: FontWeight.bold,
-                color: Color.fromARGB(255, 129, 168, 255),
+                color: const Color.fromARGB(255, 129, 168, 255),
               ),
             ),
           )),
     );
   }
 
-  Widget _headingSection(Map<String, dynamic>? comments) {
+  Widget _headingSection(Map<String, dynamic>? comments, String screenType) {
     return Container(
-      padding: const EdgeInsets.only(bottom: 20),
-      decoration: const BoxDecoration(
+      padding: EdgeInsets.only(bottom: utils.responsive(14, 16, 18, 20, screenType)),
+      decoration: BoxDecoration(
         border: Border(
-          bottom: BorderSide(color: Colors.black, width: 0.2),
+          bottom: BorderSide(color: Colors.black, width: utils.responsive(0.1, 0.1, 0.1, 0.2, screenType)),
         ),
       ),
       height: 100,
@@ -156,18 +158,18 @@ class _CommentPageState extends State<CommentPage> {
           Text(
             "Comments (${comments?.length ?? 0})",
             style: GoogleFonts.rubik(
-              textStyle: const TextStyle(
-                fontSize: 24,
-                color: Color.fromARGB(255, 47, 61, 94),
+              textStyle: TextStyle(
+                fontSize: utils.responsive(18, 20, 22, 24, screenType),
+                color: const Color.fromARGB(255, 47, 61, 94),
               ),
             ),
           ),
           Text(
             "Start a discussion, not a fire. Post with kindness.",
             style: GoogleFonts.rubik(
-              textStyle: const TextStyle(
-                fontSize: 18,
-                color: Color.fromARGB(255, 60, 81, 128),
+              textStyle: TextStyle(
+                fontSize: utils.responsive(12, 14, 16, 18, screenType),
+                color: const Color.fromARGB(255, 60, 81, 128),
               ),
             ),
           ),
@@ -178,8 +180,8 @@ class _CommentPageState extends State<CommentPage> {
 
   Widget _menuSection(String screenType) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      height: 80,
+      padding: EdgeInsets.symmetric(vertical: utils.responsive(14, 16, 18, 20, screenType)),
+      height: utils.responsive(50, 60, 70, 80, screenType),
       width: double.maxFinite,
       child: Row(
         mainAxisSize: MainAxisSize.max,
@@ -188,13 +190,13 @@ class _CommentPageState extends State<CommentPage> {
           Row(
             children: [
               Padding(
-                padding: const EdgeInsets.only(right: 10),
+                padding: EdgeInsets.only(right: utils.responsive(7, 8, 9, 10, screenType)),
                 child: Text(
                   "Sort by",
                   style: GoogleFonts.rubik(
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      color: Color.fromARGB(255, 100, 119, 166),
+                    textStyle: TextStyle(
+                      fontSize: utils.responsive(10, 12, 14, 16, screenType),
+                      color: const Color.fromARGB(255, 100, 119, 166),
                     ),
                   ),
                 ),
@@ -215,10 +217,10 @@ class _CommentPageState extends State<CommentPage> {
                                 value,
                                 textAlign: TextAlign.right,
                                 style: GoogleFonts.rubik(
-                                  textStyle: const TextStyle(
+                                  textStyle: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    fontSize: 16,
-                                    color: Color.fromARGB(255, 100, 119, 166),
+                                    fontSize: utils.responsive(10, 12, 14, 16, screenType),
+                                    color: const Color.fromARGB(255, 100, 119, 166),
                                   ),
                                 ),
                               ),
@@ -233,9 +235,9 @@ class _CommentPageState extends State<CommentPage> {
                     dropdownStyleData: const DropdownStyleData(
                       elevation: 1,
                     ),
-                    buttonStyleData: const ButtonStyleData(
+                    buttonStyleData: ButtonStyleData(
                       height: 30,
-                      width: 120,
+                      width: utils.responsive(90, 100, 110, 120, screenType),
                     ),
                     menuItemStyleData: const MenuItemStyleData(
                       height: 40,
@@ -246,15 +248,15 @@ class _CommentPageState extends State<CommentPage> {
             ],
           ),
           SizedBox(
-            width: utils.responsive(null, 320, 320, screenType),
+            width: utils.responsive(null, null, 300, 320, screenType),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                utils.responsive(const SizedBox(),
+                utils.responsive(const SizedBox(), const SizedBox(),
                   Text("Done with the commenting?",
                     style: GoogleFonts.rubik(
                       textStyle: const TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
                         color: Color.fromARGB(255, 100, 119, 166),
                       ),
                     ),
@@ -272,21 +274,22 @@ class _CommentPageState extends State<CommentPage> {
                     context.goNamed("landing_page");
                   },
                   child: SizedBox(
-                    width: 85,
+                    width: utils.responsive(60, 70, 80, 90, screenType),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Icon(
+                        Icon(
                           Icons.logout,
-                          color: Color.fromARGB(255, 100, 119, 166),
+                          color: const Color.fromARGB(255, 100, 119, 166),
+                          size: utils.responsive(18, 20, 22, 24, screenType),
                         ),
                         Text(
                           "Logout",
                           style: GoogleFonts.rubik(
-                            textStyle: const TextStyle(
-                              fontSize: 16,
+                            textStyle: TextStyle(
+                              fontSize: utils.responsive(10, 12, 14, 16, screenType),
                               fontWeight: FontWeight.w500,
-                              color: Color.fromARGB(255, 100, 119, 166),
+                              color: const Color.fromARGB(255, 100, 119, 166),
                             ),
                           ),
                         ),
@@ -302,7 +305,7 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _myCommentSection() {
+  Widget _myCommentSection(String screenType) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 30),
       child: ConstrainedBox(
@@ -317,8 +320,8 @@ class _CommentPageState extends State<CommentPage> {
               borderRadius: BorderRadius.circular(100),
               child: SvgPicture.network(
                 "https://api.dicebear.com/7.x/thumbs/svg?seed=${widget.user.username}",
-                height: 60,
-                width: 60,
+                height: utils.responsive(48, 50, 50, 60, screenType),
+                width: utils.responsive(48, 50, 50, 60, screenType),
                 fit: BoxFit.cover,
               ),
             ),
@@ -333,7 +336,7 @@ class _CommentPageState extends State<CommentPage> {
                       keyboardType: TextInputType.multiline,
                       maxLines: null,
                       style: GoogleFonts.rubik(
-                        textStyle: const TextStyle(fontWeight: FontWeight.w300),
+                        textStyle: TextStyle(fontWeight: FontWeight.w300, fontSize: utils.responsive(10, 12, 14, 16, screenType)),
                       ),
                       decoration: InputDecoration(
                           hintText: "Add a comment as ${widget.user.username} ...",
@@ -346,11 +349,12 @@ class _CommentPageState extends State<CommentPage> {
                             borderSide:
                                 BorderSide(color: Colors.black, width: 0.1),
                           ),
-                          suffixIcon: const SizedBox.shrink()),
+                          suffixIcon: const SizedBox.shrink(),
+                      ),
                     ),
                     Positioned(
                       right: 2,
-                      bottom: 3,
+                      bottom: utils.responsive(1, 2, 3, 3, screenType),
                       child: Container(
                         margin: const EdgeInsets.all(0),
                         height: 50,
@@ -381,8 +385,9 @@ class _CommentPageState extends State<CommentPage> {
     );
   }
 
-  Widget _commentSection(List<String>? keysComment) {
+  Widget _commentSection(List<String>? keysComment, screenType) {
     return FirebaseAnimatedList(
+      physics: const NeverScrollableScrollPhysics(),
       query: _commentController.getCommentsQueryFromDB(sortValue),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
@@ -396,8 +401,8 @@ class _CommentPageState extends State<CommentPage> {
                   borderRadius: BorderRadius.circular(100),
                   child: SvgPicture.network(
                     "https://api.dicebear.com/7.x/thumbs/svg?seed=${firebaseComments["username"]}",
-                    height: 60,
-                    width: 60,
+                    height: utils.responsive(40, 45, 50, 60, screenType),
+                    width: utils.responsive(40, 45, 50, 60, screenType),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -407,7 +412,7 @@ class _CommentPageState extends State<CommentPage> {
                     margin: const EdgeInsets.only(left: 20, bottom: 20),
                     decoration: const BoxDecoration(
                       border: Border(
-                        bottom: BorderSide(color: Colors.black, width: 0.1),
+                        bottom: BorderSide(color: Colors.grey, width: 0.1),
                       ),
                     ),
                     child: Column(
@@ -419,19 +424,19 @@ class _CommentPageState extends State<CommentPage> {
                             TextSpan(
                                 text: firebaseComments["username"],
                                 style: GoogleFonts.rubik(
-                                  textStyle: const TextStyle(
+                                  textStyle: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 16,
+                                    fontSize: utils.responsive(10, 12, 14, 16, screenType),
                                   ),
                                 ),
                                 children: [
                                   TextSpan(
                                     text: "  •  ${timeago.format(DateTime.fromMillisecondsSinceEpoch(int.parse(firebaseComments["date_time"])))}",
                                     style: GoogleFonts.rubik(
-                                      textStyle: const TextStyle(
+                                      textStyle: TextStyle(
                                         fontWeight: FontWeight.w400,
                                         color: Colors.grey,
-                                        fontSize: 14,
+                                        fontSize: utils.responsive(8, 10, 12, 14, screenType),
                                       ),
                                     ),
                                   ),
@@ -443,7 +448,7 @@ class _CommentPageState extends State<CommentPage> {
                           child: Text(
                             firebaseComments["message"],
                             style: GoogleFonts.rubik(
-                              textStyle: const TextStyle(fontSize: 16),
+                              textStyle: TextStyle(fontSize: utils.responsive(10, 12, 14, 16, screenType)),
                             ),
                           ),
                         ),
@@ -452,10 +457,10 @@ class _CommentPageState extends State<CommentPage> {
                           child: Row(
                             children: [
                               Text(
-                                "${(firebaseComments["likeCount"] != 0) ? firebaseComments["likeCount"] * -1 : 0} Like   •   ",
+                                "${(firebaseComments["likeCount"] != 0) ? (firebaseComments["likeCount"] * -1) : 0} Like   •   ",
                                 style: GoogleFonts.rubik(
-                                  textStyle: const TextStyle(
-                                      fontSize: 14, color: Colors.grey),
+                                  textStyle: TextStyle(
+                                      fontSize: utils.responsive(8, 10, 12, 14, screenType), color: Colors.grey),
                                 ),
                               ),
                               InkWell(
@@ -469,7 +474,7 @@ class _CommentPageState extends State<CommentPage> {
                                 child: Icon(
                                   Icons.thumb_up,
                                   color: (firebaseComments["like"]?[widget.user.username] ?? false) ? const Color.fromARGB(255, 129, 168, 255) : Colors.grey,
-                                  size: 18,
+                                  size: utils.responsive(12, 14, 16, 18, screenType),
                                 ),
                               ),
                             ],

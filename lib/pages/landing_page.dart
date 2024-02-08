@@ -16,10 +16,12 @@ class LandingPage extends StatelessWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           if(constraints.maxWidth >= 1100){ // Extended
-            return _mainPage(context, utils.screenTypes[2]);
+            return _mainPage(context, utils.screenTypes[3]);
           } else if (constraints.maxWidth >= 600 && constraints.maxWidth < 1100) { // Medium
+            return _mainPage(context, utils.screenTypes[2]);
+          } else if (constraints.maxWidth >= 480 && constraints.maxWidth < 600){ // Compact
             return _mainPage(context, utils.screenTypes[1]);
-          } else { // Compact
+          } else { // Very Compact Device
             return _mainPage(context, utils.screenTypes[0]);
           }
         },
@@ -47,7 +49,7 @@ class LandingPage extends StatelessWidget {
                 flex: 6,
                 child: Container(
                   // color: Colors.red,
-                  padding: EdgeInsets.only(left: utils.responsive(70, 110, 110, screenType), right: utils.responsive(70, 110, 0, screenType)),
+                  padding: EdgeInsets.only(left: utils.responsive(20, 70, 110, 110, screenType), right: utils.responsive(20, 70, 110, 0, screenType)),
                   // width: 500,
                   height: 300,
                   child: Column(
@@ -58,7 +60,7 @@ class LandingPage extends StatelessWidget {
                           text: "Welcome to my ",
                           style: GoogleFonts.rubik(
                             textStyle: TextStyle(
-                                fontSize: utils.responsive(36, 40, 47, screenType), fontWeight: FontWeight.w700,
+                                fontSize: utils.responsive(30, 36, 40, 47, screenType), fontWeight: FontWeight.w700,
                             ),
                           ),
                           children: const [
@@ -70,25 +72,25 @@ class LandingPage extends StatelessWidget {
                             TextSpan(text: "!"),
                           ],
                         ),
-                        textAlign: utils.responsive(TextAlign.left, TextAlign.center, TextAlign.left, screenType),
+                        textAlign: utils.responsive(TextAlign.center, TextAlign.left, TextAlign.center, TextAlign.left, screenType),
                       ),
                       Text(
                         "This is a platform to comment freely about me, or discuss any topic for free. And of course your identity will remain secret on other users.",
                         style: GoogleFonts.rubik(
                           textStyle: TextStyle(
-                            fontSize: utils.responsive(14, 16, 16, screenType),
+                            fontSize: utils.responsive(14, 14, 16, 16, screenType),
                             color: const Color.fromARGB(255, 60, 81, 128),
                           ),
                         ),
-                        textAlign: utils.responsive(TextAlign.left, TextAlign.center, TextAlign.left, screenType),
+                        textAlign: utils.responsive(TextAlign.center, TextAlign.left, TextAlign.center, TextAlign.left, screenType),
                       ),
                       Row(
-                        mainAxisAlignment: utils.responsive(MainAxisAlignment.start, MainAxisAlignment.center, MainAxisAlignment.start, screenType),
+                        mainAxisAlignment: utils.responsive(MainAxisAlignment.center, MainAxisAlignment.start, MainAxisAlignment.center, MainAxisAlignment.start, screenType),
                         children: [
                           Container(
                             margin: const EdgeInsets.only(right: 30),
-                            width: utils.responsive(150, 165, 170, screenType),
-                            height: utils.responsive(50, 50, 60, screenType),
+                            width: utils.responsive(100, 150, 165, 170, screenType),
+                            height: utils.responsive(47, 50, 50, 60, screenType),
                             child: ElevatedButton(
                               onPressed: () {
                                 context.goNamed("login_page");
@@ -104,10 +106,10 @@ class LandingPage extends StatelessWidget {
                                 const Color.fromARGB(255, 129, 168, 255),
                               ),
                               child: Text(
-                                "SIGN IN",
+                                "Sign In",
                                 style: GoogleFonts.rubik(
                                     textStyle: TextStyle(
-                                      fontSize: utils.responsive(12, 12, 14, screenType),
+                                      fontSize: utils.responsive(11, 12, 12, 14, screenType),
                                       fontWeight: FontWeight.bold,
                                     ),
                                 ),
@@ -115,8 +117,8 @@ class LandingPage extends StatelessWidget {
                             ),
                           ),
                           SizedBox(
-                            width: utils.responsive(150, 165, 170, screenType),
-                            height: utils.responsive(50, 50, 60, screenType),
+                            width: utils.responsive(140, 150, 165, 170, screenType),
+                            height: utils.responsive(47, 50, 50, 60, screenType),
                             child: ElevatedButton(
                               onPressed: () {
                                 context.goNamed("register_page");
@@ -139,7 +141,7 @@ class LandingPage extends StatelessWidget {
                                 "Register for FREE",
                                 style: GoogleFonts.rubik(
                                   textStyle: TextStyle(
-                                    fontSize: utils.responsive(12, 12, 14, screenType),
+                                    fontSize: utils.responsive(11, 12, 12, 14, screenType),
                                   ),
                                 ),
                               ),
@@ -151,7 +153,7 @@ class LandingPage extends StatelessWidget {
                   ),
                 ),
               ),
-              utils.responsive(const SizedBox(), const SizedBox(), Flexible(
+              utils.responsive(const SizedBox(), const SizedBox(), const SizedBox(), Flexible(
                   flex: 5,
                   child: Center(
                     child: Container(
