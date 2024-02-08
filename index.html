@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <!--
     If you are serving your web app in a path other than the root, change the
@@ -34,12 +34,55 @@
 
   <script>
     // The value below is injected by flutter build, do not touch.
-    const serviceWorkerVersion = "2611194628";
+    const serviceWorkerVersion = "3711497317";
   </script>
   <!-- This script adds the flutter initialization JS code -->
   <script src="flutter.js" defer></script>
+
+  <!--  Khip01 Custom-->
+  <!--  Tailwind CSS Import -->
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body>
+  <!--
+        Size comment_section responsive:
+        Veru Compact > Compact  > Medium     > Large
+        > 0          > 480      > 600        > 1100
+         1, center    1, left    1, center    2, left
+    -->
+  <div class="h-screen w-full flex flex-row justify-center xl:justify-between 2xl:justify-between py-36 px-24">
+    <!-- Left side -->
+    <div class="h-full w-full flex max-w-md md:max-w-2xl lg:max-w-3xl xl:max-w-3xl 2xl:max-w-3xl items-center">
+      <!-- <div class="w-full h-72 flex flex-col justify-between"> -->
+      <div class="w-full h-72 flex flex-col justify-between">
+        <!-- Heading -->
+        <div class="flex flex-col items-center xl:items-start 2xl:items-start pt-6">
+          <h1 class="w-full md:w-2/3 lg:w-2/3 xl:w-2/3 2xl:w-2/3 mb-4 h-10 animate-pulse rounded-xl xl:rounded-r-xl 2xl:rounded-r-xl bg-slate-200"></h1>
+          <h1 class="w-5/6 md:w-2/5 lg:w-2/5 xl:w-2/5 2xl:w-2/5 mb-4 h-10 animate-pulse rounded-xl xl:rounded-r-xl 2xl:rounded-r-xl bg-slate-200"></h1>
+        </div>
+        <!-- Body -->
+        <div class="flex flex-col items-center xl:items-start 2xl:items-start">
+          <p class="leading-relaxed mb-3 w-full md:w-4/5 lg:w-4/5 xl:w-4/5 2xl:w-4/5 h-3 animate-pulse rounded-md xl:rounded-r-md 2xl:rounded-r-md bg-slate-200"></p>
+          <p class="leading-relaxed mb-3 w-5/6 md:w-2/3 lg:w-2/3 xl:w-2/3 2xl:w-2/3 h-3 animate-pulse rounded-md xl:rounded-r-md 2xl:rounded-r-md bg-slate-200"></p>
+          <!-- <p class="leading-relaxed mb-3 w-1/2 h-3 animate-pulse rounded-md xl:rounded-r-md bg-slate-200"></p> -->
+        </div>
+        <!-- button -->
+        <div class="flex flex-col items-center xl:items-start 2xl:items-start">
+          <div class="flex items-center">
+            <a class="2xl:w-44 xl:w-44 lg:w-44 md:w-44 w-32 h-16 animate-pulse rounded-xl xl:rounded-r-xl 2xl:rounded-r-xl bg-slate-200 mr-8">
+
+            </a>
+            <span class="2xl:w-48 xl:w-48 lg:w-48 md:w-48 w-36 h-16 animate-pulse rounded-xl bg-slate-200">
+
+                        </span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Right side -->
+    <div class="xl:h-full 2xl:h-full xl:w-full 2xl:w-full xl:max-w-md 2xl:max-w-md xl:h-64 2xl:h-64 xl:animate-pulse 2xl:animate-pulse xl:rounded-l-3xl 2xl:rounded-l-3xl xl:bg-slate-200 2xl:bg-slate-200 invisible xl:visible 2xl:visible">
+    </div>
+  </div>
   <script>
     window.addEventListener('load', function(ev) {
       // Download main.dart.js
