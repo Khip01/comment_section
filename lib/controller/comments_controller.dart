@@ -94,6 +94,7 @@ class CommentController {
       "message" : message,
       "username" : currentUsername,
       "index" : index,
+      "likeCount" : 0,
     };
 
     // Get a key for a new Post.
