@@ -41,7 +41,7 @@ class CommentController {
     // Get Key that equal to uniqIndex
     DatabaseEvent event = await database.ref().child("comments").orderByChild("index").equalTo(uniqIndex).once();
     DataSnapshot snapshotComments = event.snapshot;
-    Map<String, dynamic> comments = (snapshotComments.value ?? new Map<String, dynamic>()) as Map<String, dynamic>;
+    Map<String, dynamic> comments = ((snapshotComments.value ?? new Map<String, dynamic>()) as Map<Object?, Object?>).cast<String, dynamic>();
     comments.forEach((key, value) {
       storedKey.add(key);
     });
@@ -52,7 +52,7 @@ class CommentController {
     final snapshotComment = await ref.get();
 
     // Fetch data from reference to Map
-    Map<String, dynamic> selectedComment = snapshotComment.value as Map<String, dynamic>;
+    Map<String, dynamic> selectedComment = (snapshotComment.value as Map<Object?, Object?>).cast<String, dynamic>();
 
     // Fetch Map for updating likes
     Map likeMap = selectedComment["like"] ?? {};
@@ -109,14 +109,23 @@ class CommentController {
   }
 
   Future<int> _generateIndex() async {
-    DatabaseEvent event = await database.ref().child("comments").orderByChild("index").once();
-    Map<String, dynamic> comments = (event.snapshot.value ?? {}) as Map<String, dynamic>;
+    // DatabaseEvent event = await database.ref().child("comments").orderByChild("index").once();
+    DatabaseEvent event = await database.ref().child("comments").once();
+    Map<String, dynamic> comments = ((event.snapshot.value ?? {}) as Map<Object?, Object?>).cast<String, dynamic>();
 
     // If empty return default index value
     if(comments.isEmpty){
       return 10000000000;
     }
 
-    return comments.values.last["index"] -= 1;
+    // Do Sorting based on index
+    List<MapEntry<String, dynamic>> sortedComments = comments.entries.toList()
+        ..sort((a, b) => a.value["index"].compareTo(b.value["index"]));
+
+    // Get The latest object user from sorted comment
+    Map<String, dynamic> latestUser = (sortedComments.first.value as Map<Object?, Object?>).cast<String, dynamic>();
+
+    // Then return the generated index -1
+    return latestUser["index"] -= 1;
   }
 }
