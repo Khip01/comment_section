@@ -10,6 +10,7 @@ import 'package:go_router/go_router.dart';
 import 'firebase_options.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Fix Error Binding Mobile Run
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(MyApp());
 }
