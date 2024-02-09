@@ -1,16 +1,33 @@
-# comment_section
+# Simple Flutter-Web-App | Comment Section
+<img src="https://img.shields.io/badge/Type-Web%2FSitus%20web-lightgrey" alt="Type : Web/Situs web"> 
 
-Create simple comment section integrate with Firebase
+## 👋Helo
 
-## Getting Started
+Language: English
 
-This project is a starting point for a Flutter application.
+## 📝Description
+Create a Simple Chat Web Page that can be used **anonymously** for everyone! \
+Using Flutter Web technology and Firebase Realtime Database.
 
-A few resources to get you started if this is your first Flutter project:
+## 🎬Live Demo
+Curious to see the simple web results directly?\
+Check this out <a href="https://khip01.github.io/comment_section/" target="_blank">Comment Section | Live Demo Web</a>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+<br>
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Or do you want to edit and run this project by yourself? <br>
+Follow these steps:
+
+### 📋Requirements
+- Flutter already installed
+- Your fav IDE/TextEditor (I personally use Android Studio)
+
+### 📖Instruction
+- Clone this repo _(`main` branch)_,
+- Open the cloned project
+- Then Run the app as Website in your fav browser! 
+
+<br>
+
+# 🖥️Use
+[![My Skills](https://skillicons.dev/icons?i=flutter,androidstudio,firebase,html,tailwind)](https://github.com/Khip01)
