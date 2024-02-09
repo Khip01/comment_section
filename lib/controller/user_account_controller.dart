@@ -30,7 +30,7 @@ class UserController {
     final snapshot = await ref.child("user").get();
 
     if (snapshot.exists) {
-      Map<String, dynamic> data = snapshot.value as Map<String, dynamic>;
+      Map<String, dynamic> data = (snapshot.value as Map<Object?, Object?>).cast<String, dynamic>();
       for (String key in data.keys) {
         if (key.toLowerCase() == username.toLowerCase()) {
           return true;
@@ -51,7 +51,8 @@ class UserController {
     final databaseEvent = await query.once();
 
     if (databaseEvent.snapshot.exists) {
-      Map<String, dynamic> dataFound = databaseEvent.snapshot.value as Map<String, dynamic>;
+      // Retrive data from event then cast to Map<String, dynamic> for app consume
+      Map<String, dynamic> dataFound = (databaseEvent.snapshot.value as Map<Object?, Object?>).cast<String, dynamic>();
       return dataFound.keys.first;
     } else {
       return null;
