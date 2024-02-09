@@ -76,11 +76,11 @@ class _CommentPageState extends State<CommentPage> {
             case ConnectionState.waiting:
               return _bodyPageShimmer();
             case ConnectionState.active:
-              Map<String, dynamic>? comments = (snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<String, dynamic>?;
-              return _bodyPage(comments, comments?.keys.toList(), screenType);
+              Map<String, dynamic>? comments = ((snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<Object?, Object?>).cast<String, dynamic>();
+              return _bodyPage(comments, comments.keys.toList(), screenType);
             case ConnectionState.done:
-              Map<String, dynamic>? comments = (snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<String, dynamic>?;
-              return _bodyPage(comments, comments?.keys.toList(), screenType);
+              Map<String, dynamic>? comments = ((snapshot.data!.snapshot.value ?? new Map<String, dynamic>()) as Map<Object?, Object?>).cast<String, dynamic>();
+              return _bodyPage(comments, comments.keys.toList(), screenType);
           }
         }
       },
@@ -404,7 +404,7 @@ class _CommentPageState extends State<CommentPage> {
       query: _commentController.getCommentsQueryFromDB(sortValue),
       shrinkWrap: true,
       itemBuilder: (BuildContext context, DataSnapshot snapshot, Animation<double> animation, int index) {
-        Map<String, dynamic> firebaseComments = snapshot.value as Map<String, dynamic>;
+        Map<String, dynamic> firebaseComments = (snapshot.value as Map<Object?, Object?>).cast<String, dynamic>();
 
           return SizedBox(
             child: Row(
