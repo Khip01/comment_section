@@ -10,12 +10,14 @@ Create a Simple Chat Web Page that can be used **anonymously** for everyone! \
 Using Flutter Web technology and Firebase Realtime Database.
 
 ## 🎬Live Demo
-Curious to see the simple web results directly?\
+Curious to see the simple **web results** directly?\
 Check this out <a href="https://khip01.github.io/comment_section/" target="_blank">Comment Section | Live Demo Web</a>
+
+OR you can also check the **_.apk_** file in the [release assets](https://github.com/Khip01/comment_section/releases/tag/v1.0.0) section of this repo, then install it on your mobile phone.
 
 <br>
 
-Or do you want to edit and run this project by yourself? <br>
+OR do you want to **edit and run this project by yourself?** <br>
 Follow these steps:
 
 ### 📋Requirements
