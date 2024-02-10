@@ -8,3 +8,4 @@ linux/
 macos/
 windows/
 build/
+node_modules/
