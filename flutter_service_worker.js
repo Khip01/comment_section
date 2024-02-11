@@ -26,9 +26,9 @@ const RESOURCES = {"assets/AssetManifest.bin": "ffac2066deedde787235d051bed2e0c0
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
-"index.html": "d945bdc978e54b7171a698ec3a838eae",
-"/": "d945bdc978e54b7171a698ec3a838eae",
-"main.dart.js": "a21646833e336d52f2df41759d8a908f",
+"index.html": "f5330dbc59ec71f12563c0f7ad7dffed",
+"/": "f5330dbc59ec71f12563c0f7ad7dffed",
+"main.dart.js": "86e076cb7581e320036214fb1c223f50",
 "manifest.json": "83228f74789b7df48e4f438d02777fab",
 "node_modules/.bin/cssesc": "4bfe6e8074ff6dfed7d6545913d189df",
 "node_modules/.bin/cssesc.cmd": "3c413ef55592325d63ac2d3ab3b57c9b",
@@ -1953,10 +1953,10 @@ const RESOURCES = {"assets/AssetManifest.bin": "ffac2066deedde787235d051bed2e0c0
 "node_modules/yaml/package.json": "49a4e38377bd3e61424cafb3ff445f2f",
 "node_modules/yaml/README.md": "3d4faa4710fc51b220c5a5d1b6aee46c",
 "node_modules/yaml/util.js": "997c7cb87fa716a29bc5565e7e290c4e",
-"package-lock.json": "14a8298b4b894bfa09b609b659e2c8ec",
-"package.json": "636a72dd516b319d06b6104dde0f9978",
-"tailwind.config.js": "214504becc2161cda73b368b16d61938",
-"tailwind_style.css": "eade682d7bc01681bab1a0141da2c8d4",
+"package-lock.json": "8d82a1aba0ad74d78965d3a6011ac227",
+"package.json": "eaa183d3cf6b29c88eefb50e76ca897a",
+"tailwind.config.js": "a9abcbe0b45879a31355ebdaa364d60d",
+"tailwind_style.css": "1832fcbb0567ea903847814012bade70",
 "version.json": "61a4eed8a2bc619afe210a081c920122"};
 // The application shell files that are downloaded before a service worker can
 // start.
